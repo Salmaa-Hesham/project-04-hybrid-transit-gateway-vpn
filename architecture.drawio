@@ -1,0 +1,77 @@
+<mxfile host="app.diagrams.net" modified="2026-09-26T20:00:00.000Z" agent="Mozilla/5.0" version="21.6.5" type="device">
+  <diagram id="aws-project-04" name="Hybrid Cloud with Transit Gateway">
+    <mxGraphModel dx="1422" dy="880" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- On-Premises Box -->
+        <mxCell id="box-onprem" value="On-Premises Data Center (192.168.0.0/16)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#FEF2F2;strokeColor=#B91C1C;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="380" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="onprem-server" value="On-Prem Enterprise Servers&#xa;IP Range: 192.168.10.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#475569;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="onprem-dns" value="Corporate DNS Server&#xa;IP: 192.168.1.10 (corp.internal)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3B82F6;strokeColor=#1D4ED8;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="270" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="cgw" value="Customer Gateway (CGW)&#xa;Public IP: 203.0.113.10&#xa;BGP ASN: 65000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DC2626;strokeColor=#991B1B;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="450" width="300" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Transit Gateway Hub Box -->
+        <mxCell id="box-tgw" value="AWS Transit Gateway Hub (ASN: 64512)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#EFF6FF;strokeColor=#2563EB;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="520" y="80" width="360" height="580" as="geometry" />
+        </mxCell>
+        <mxCell id="tgw-router" value="AWS Transit Gateway&#xa;Route Engine &amp; Attachment Manager&#xa;Up to 50 Gbps / Attachment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6D28D9;strokeColor=#4C1D95;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="160" width="300" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="tgw-rt-spoke" value="Spoke TGW Route Table&#xa;(Dev &amp; Prod Associations)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2563EB;strokeColor=#1E40AF;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="320" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tgw-rt-onprem" value="On-Prem TGW Route Table&#xa;(VPN Association)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1D4ED8;strokeColor=#1E3A8A;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="440" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- AWS VPC Spokes Box -->
+        <mxCell id="box-spokes" value="AWS VPC Spokes (us-east-1)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#F8FAFC;strokeColor=#64748B;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="960" y="80" width="560" height="580" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vpc-dev" value="Development VPC (10.10.0.0/16)&#xa;Subnet: 10.10.1.0/24 | TGW Subnet: 10.10.254.0/28" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="140" width="480" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vpc-prod" value="Production VPC (10.30.0.0/16)&#xa;Subnet: 10.30.1.0/24 | TGW Subnet: 10.30.254.0/28" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="260" width="480" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vpc-shared" value="Shared Services VPC (10.100.0.0/16)&#xa;Route 53 Resolver Endpoints (Inbound: 10.100.1.10, Outbound)&#xa;Central Egress &amp; Inspection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0E7FF;strokeColor=#4338CA;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="380" width="480" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ram" value="AWS RAM (Resource Access Manager)&#xa;Cross-Account Organization Sharing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#059669;strokeColor=#065F46;fontColor=#FFFFFF;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="520" width="480" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Connectors -->
+        <mxCell id="c1" edge="1" source="cgw" target="tgw-router" style="strokeWidth=3;strokeColor=#DC2626;" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" edge="1" source="tgw-router" target="vpc-dev" style="strokeWidth=2;strokeColor=#2563EB;" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" edge="1" source="tgw-router" target="vpc-prod" style="strokeWidth=2;strokeColor=#2563EB;" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" edge="1" source="tgw-router" target="vpc-shared" style="strokeWidth=2;strokeColor=#2563EB;" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" edge="1" source="onprem-dns" target="vpc-shared" style="strokeWidth=2;strokeColor=#3B82F6;dashed=1;" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
