@@ -37,61 +37,7 @@ This architecture delivers:
 
 ![Hybrid Cloud with Transit Gateway Architecture Diagram](architecture.png)
 
-<details>
-<summary>Click to view Mermaid diagram markup</summary>
 
-```mermaid
-flowchart TB
-    subgraph OnPrem ["On-Premises Corporate Data Center (192.168.0.0/16)"]
-        CGW["Customer Gateway (CGW)\nPublic IP: 203.0.113.10\nBGP ASN: 65000"]
-        CorporateDNS["Corporate DNS Server\nIP: 192.168.1.10\nDomain: corp.internal"]
-        OnPremServers["Legacy Database / ERP\nSubnet: 192.168.10.0/24"]
-    end
-
-    subgraph AWSCloud ["AWS Cloud (us-east-1)"]
-        subgraph TGWHub ["Transit Gateway Hub (ASN: 64512)"]
-            TGW["AWS Transit Gateway"]
-            RT_Spoke["Spoke TGW Route Table"]
-            RT_OnPrem["On-Prem TGW Route Table"]
-        end
-
-        subgraph VPC_Dev ["Development VPC (10.10.0.0/16)"]
-            DevSubnet["Dev Compute (10.10.1.0/24)"]
-            DevTransitSub["TGW Subnet (10.10.254.0/28)"]
-        end
-
-        subgraph VPC_Prod ["Production VPC (10.30.0.0/16)"]
-            ProdSubnet["Prod Workloads (10.30.1.0/24)"]
-            ProdTransitSub["TGW Subnet (10.30.254.0/28)"]
-        end
-
-        subgraph VPC_Shared ["Shared Services VPC (10.100.0.0/16)"]
-            subgraph DNSResolver ["Route 53 Resolver Endpoints"]
-                InboundEP["Inbound Endpoint\nIP: 10.100.1.10\nResolves *.aws.internal"]
-                OutboundEP["Outbound Endpoint\nForwards *.corp.internal\nto 192.168.1.10"]
-            end
-            SharedTransitSub["TGW Subnet (10.100.254.0/28)"]
-        end
-    end
-
-    %% VPN IPSec Tunnels
-    CGW <==>|IPSec Tunnel 1 (Active BGP)| TGW
-    CGW <==>|IPSec Tunnel 2 (Standby BGP)| TGW
-
-    %% TGW Attachments
-    TGW --- DevTransitSub
-    TGW --- ProdTransitSub
-    TGW --- SharedTransitSub
-
-    %% DNS Flows
-    CorporateDNS -->|1. Forward *.aws.internal queries| InboundEP
-    InboundEP -->|2. Query Private Hosted Zone| DevSubnet & ProdSubnet
-    ProdSubnet -->|3. Resolve *.corp.internal| OutboundEP
-    OutboundEP -->|4. Forward DNS Query via VPN| CorporateDNS
-```
-</details>
-
-> **Note**: A vector format source file (`architecture.drawio`) is included in this directory. You can open and edit it in [draw.io](https://app.diagrams.net/) or [Lucidchart](https://lucid.app/).
 
 ---
 
